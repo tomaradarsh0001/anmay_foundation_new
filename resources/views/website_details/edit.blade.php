@@ -1,6 +1,6 @@
-<!-- resources/views/website_details/edit.blade.php -->
+@extends('admin.layouts.app')
 
-@extends('layouts.app')
+@section('title', 'Admin - Website Details')
 
 @section('content')
 <div class="container">

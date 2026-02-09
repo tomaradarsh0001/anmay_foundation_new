@@ -1,16 +1,16 @@
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
     <div class="top-bar text-white-50 row gx-0 align-items-center d-none d-lg-flex">
         <div class="col-lg-6 px-5 text-start">
-            <small><i class="fa fa-map-marker-alt me-2"></i>Krishna Nagar, Delhi-110051</small>
+            <small><i class="fa fa-map-marker-alt me-2"></i>{{ $websiteDetails->address ?? 'Not set' }}</small>
             <small class="ms-2"><i class="fa fa-envelope me-2"></i>{{ $websiteDetails->email ?? 'Not set' }}</small>
-            <small class="ms-2"><i class="fa fa-mobile me-2"></i>+91 93112 75728</small>
+            <small class="ms-2"><i class="fa fa-mobile me-2"></i>{{ $websiteDetails->phone ?? 'Not set' }}</small>
         </div>
         <div class="col-lg-6 px-5 text-end">
             <small>Follow us:</small>
-            <a class="text-white-50 ms-3" href=""><i class="fab fa-facebook-f"></i></a>
-            <a class="text-white-50 ms-3" href=""><i class="fab fa-twitter"></i></a>
-            <a class="text-white-50 ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
-            <a class="text-white-50 ms-3" href=""><i class="fab fa-instagram"></i></a>
+            <a class="text-white-50 ms-3" href="{{ $websiteDetails->facebook ?? 'Not set' }}"><i class="fab fa-facebook-f"></i></a>
+            <a class="text-white-50 ms-3" href="{{ $websiteDetails->twitter ?? 'Not set' }}"><i class="fab fa-twitter"></i></a>
+            <a class="text-white-50 ms-3" href="{{ $websiteDetails->linkedin ?? 'Not set' }}"><i class="fab fa-linkedin-in"></i></a>
+            <a class="text-white-50 ms-3" href="{{ $websiteDetails->instagram ?? 'Not set' }}"><i class="fab fa-instagram"></i></a>
         </div>
     </div>
 
@@ -25,7 +25,8 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('home') }}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('about') }}" class="nav-item nav-link {{ request()->routeIs('about') ? 'active' : '' }}">About</a>
-                <a href="" class="nav-item nav-link {{ request()->routeIs('causes') ? 'active' : '' }}">Causes</a>
+                <a href="{{ route('causes') }}" class="nav-item nav-link {{ request()->routeIs('causes') ? 'active' : '' }}">Causes</a>
+                <a href="{{ route('testimonial') }}" class="nav-item nav-link {{ request()->routeIs('testimonial') ? 'active' : '' }}">Testimonials</a>
                 <a href="{{ route('volunteer') }}" class="nav-item nav-link {{ request()->routeIs('volunteer') ? 'active' : '' }}">Volunteer</a>
                 <a href="{{ route('contact') }}" class="nav-item nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
             </div>

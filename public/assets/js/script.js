@@ -76,4 +76,62 @@ document.getElementById('contactForm').addEventListener('submit', function (e) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = 'Submit';
         });
+
+});
+
+document.getElementById('contactForm2').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+    const messageBox = document.getElementById('formMessage2');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Disable button and show submitting text
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending...';
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                messageBox.innerHTML = `
+                <div class="form-message success">
+                    <i class="fa fa-check-circle"></i>
+                    <span>${data.message}</span>
+                </div>
+            `;
+
+                // Fade out message after 4 seconds
+                setTimeout(() => {
+                    const msg = document.querySelector('.form-message');
+                    if (msg) {
+                        msg.style.animation = 'fadeOut 0.5s ease forwards';
+                        setTimeout(() => msg.remove(), 500);
+                    }
+                }, 4000);
+
+                form.reset();
+            } else {
+                messageBox.innerHTML = `
+                <div class="alert alert-danger">
+                    ${data.message}
+                </div>
+            `;
+            }
+        })
+        .catch(() => {
+            messageBox.innerHTML = `
+            <div class="alert alert-danger">
+                Server error. Please try again.
+            </div>
+        `;
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Send Message <i class="fa fa-paper-plane ms-2"></i>';
+        });
 });

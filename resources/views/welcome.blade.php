@@ -394,20 +394,20 @@
                     <div class="d-flex align-items-center mb-3">
                         <i class="fa fa-user fa-lg text-primary me-3"></i>
                         <div>
-                            <h6 class="mb-0 fw-semibold">John Doe</h6>
+                            <h6 class="mb-0 fw-semibold">Ankita Gupta</h6>
                             <small class="text-muted">Main Contact</small>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-3">
                         <i class="fa fa-envelope fa-lg text-primary me-3"></i>
                         <div>
-                            <h6 class="mb-0"><a href="mailto:contact@anmay.org" class="text-dark">contact@anmay.org</a></h6>
+                            <h6 class="mb-0"><a href="mailto:{{ $websiteDetails->email ?? 'Not set' }}" class="text-dark">{{ $websiteDetails->email ?? 'Not set' }}</a></h6>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-3">
                         <i class="fa fa-phone fa-lg text-primary me-3"></i>
                         <div>
-                            <h6 class="mb-0"><a href="tel:+1234567890" class="text-dark">+1 234 567 890</a></h6>
+                            <h6 class="mb-0"><a href="tel:{{ $websiteDetails->phone ?? 'Not set' }}" class="text-dark">{{ $websiteDetails->phone ?? 'Not set' }}</a></h6>
                         </div>
                     </div>
                 </div>
@@ -420,8 +420,9 @@
             <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.4s">
 
                 <div class="bg-white shadow rounded p-5">
-                                                        <h2 class="fw-bold mb-4">Contact Form</h2>
-                    <form id="contactForm" action="{{ route('form.store') }}" method="POST">
+                     <h2 class="fw-bold mb-4">Contact Form</h2>
+                     <div id="formMessage2" class="form-message-wrapper"></div>
+                    <form id="contactForm2" action="{{ route('form.store.contact') }}" method="POST">
                         @csrf
                         <div class="row g-3">
 

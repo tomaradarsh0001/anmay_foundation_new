@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
+
+@section('title', 'Admin - Testimonials')
 
 @section('content')
 <div class="container my-5">
