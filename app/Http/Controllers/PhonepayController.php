@@ -58,25 +58,24 @@ class PhonepayController extends Controller
         $merchantOrderId = 'ORDER' . time();
 
         $payload = [
-    'merchantOrderId' => 'ORDER' . time(),
-    'amount' => $amountPaise,
-    'expireAfter' => 1200,
-    'metaInfo' => [
-        'udf1' => $request->fullName,
-        'udf2' => $request->email,
-        'udf3' => $request->phone,
-        'udf4' => 'Donation',
-        'udf5' => 'Ref1'
-    ],
-    'paymentFlow' => [
-        'type' => 'PG_CHECKOUT',
-        'message' => 'Donation Payment',
-        'merchantUrls' => [
-            'redirectUrl' => 'https://abc123.ngrok.io/donation-success' // must be public
-        ]
-    ]
-];
-
+            'merchantOrderId' => $merchantOrderId,
+            'amount' => $amountPaise,
+            'expireAfter' => 1200,
+            'metaInfo' => [
+                'udf1' => $request->fullName,
+                'udf2' => $request->email,
+                'udf3' => $request->phone,
+                'udf4' => 'Donation',
+                'udf5' => 'Ref1'
+            ],
+            'paymentFlow' => [
+                'type' => 'PG_CHECKOUT',
+                'message' => 'Donation Payment',
+                'merchantUrls' => [
+                    'redirectUrl' => route('donation.success') // must be public URL
+                ]
+            ]
+        ];
 
         Log::info('Payment Payload', ['payload' => $payload]);
 
