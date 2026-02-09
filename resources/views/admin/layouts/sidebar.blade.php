@@ -47,7 +47,11 @@
                         <i class="fas fa-hand-holding-heart"></i> Causes
                     </a>
                 </li>
-
+                <li class="{{ request()->routeIs('admin.donations.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.donations.index') }}">
+                        <i class="fas fa-donate"></i> Donations
+                    </a>
+                </li>                               
             </ul>
         </nav>
     </div>
