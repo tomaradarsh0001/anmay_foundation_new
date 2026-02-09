@@ -34,7 +34,7 @@
             <p>Your contribution makes a difference. Every rupee counts.</p>
         </div>
 
-        <form id="donationForm" class="donation-form" method="POST" action="{{ route('donate') }}">
+        <form id="donationForm" class="donation-form" method="POST" action="{{ route('donate-now') }}">
             @csrf
             <div class="form-group">
                 <label for="fullName">Full Name *</label>

@@ -133,7 +133,7 @@ Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
 
-Route::post('/donate-now', [PhonepayController::class, 'initiatePayment'])->name('donate');
+Route::post('/donate-now', [PhonepayController::class, 'initiatePayment'])->name('donate-now');
 Route::get('/donation-success', [PhonepayController::class, 'paymentSuccess'])->name('donation.success');
 
 
