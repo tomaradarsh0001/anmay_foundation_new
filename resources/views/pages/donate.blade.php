@@ -387,20 +387,7 @@
                             </div>
                         </div>
                         
-                        <div class="mt-4 pt-4 border-top border-white border-opacity-25">
-                            <p class="text-white mb-2">
-                                <i class="fas fa-shield-alt me-2 text-success"></i>
-                                100% Secure Payment Processing
-                            </p>
-                            <p class="text-white mb-2">
-                                <i class="fas fa-receipt me-2 text-info"></i>
-                                Tax Deduction under 80G
-                            </p>
-                            <p class="text-white">
-                                <i class="fas fa-handshake me-2 text-warning"></i>
-                                Transparent Fund Utilization
-                            </p>
-                        </div>
+                     
                     </div>
                 </div>
                 
