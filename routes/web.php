@@ -7,6 +7,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\WebsiteDetailController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DonationController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -108,12 +109,24 @@ Route::get('/donate', function () {
     return view('pages.donate');
 })->name('donate');
 
+Route::get('/make-donation', function () {
+    return view('pages.phonepay');
+})->name('make-donation');
+
 
 // frontend form submit
 Route::post('/submit-form', [SubmissionController::class, 'store'])->name('form.store');
 
 
+// Public donation route
+Route::post('/donations/submit', [DonationController::class, 'submit'])->name('donations.submit');
 
+// Admin routes (protected with admin middleware)
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/donations', [DonationController::class, 'index'])->name('admin.donations.index');
+    Route::put('/donations/{id}/status', [DonationController::class, 'updateStatus'])->name('admin.donations.update-status');
+    Route::delete('/donations/{id}', [DonationController::class, 'destroy'])->name('admin.donations.destroy');
+});
 
 
 Route::post('/submit-form-contact', [ContactController::class, 'store'])->name('form.store.contact');

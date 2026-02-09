@@ -19,9 +19,9 @@
   <!-- Testimonial Start -->
      <div class=""  >
     <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;" >
-                   <div class="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mt-5 mb-3">Testimonials</div>
-                   <h1 class="display-6 mb-5 text-white">People's Love to Anmay Foundation</h1>
-               </div>
+    <div class="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mt-5 mb-3">Testimonials</div>
+    <h1 class="display-6 mb-5 text-white">People's Love to Anmay Foundation</h1>
+    </div>
   <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
     @foreach($globalTestimonials as $testimonial)
         <div class="testimonial-item text-center">
