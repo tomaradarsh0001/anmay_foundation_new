@@ -118,6 +118,9 @@ Route::post('/submit-form', [SubmissionController::class, 'store'])->name('form.
 
 Route::post('/submit-form-contact', [ContactController::class, 'store'])->name('form.store.contact');
 
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
 
 
 require __DIR__.'/auth.php';
