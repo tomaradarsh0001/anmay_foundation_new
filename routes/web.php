@@ -8,6 +8,7 @@ use App\Http\Controllers\WebsiteDetailController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\PhonepayController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -105,9 +106,6 @@ Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
-Route::get('/donate', function () {
-    return view('pages.donate');
-})->name('donate');
 
 Route::get('/make-donation', function () {
     return view('pages.phonepay');
@@ -134,6 +132,10 @@ Route::post('/submit-form-contact', [ContactController::class, 'store'])->name('
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
+
+Route::post('/donate-now', [PhonepayController::class, 'initiatePayment'])->name('donate');
+Route::get('/donation-success', [PhonepayController::class, 'paymentSuccess'])->name('donation.success');
+
 
 
 require __DIR__.'/auth.php';
