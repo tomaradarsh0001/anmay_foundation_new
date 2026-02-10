@@ -18,6 +18,12 @@
                     </a>
                 </li>
 
+                  <li class="{{ request()->routeIs('admin.profile.edit') ? 'active' : '' }}">
+                    <a href="{{ route('admin.profile.edit') }}">
+                        <i class="fas fa-user"></i> Profile Settings
+                    </a>
+                </li>
+
                 <li class="{{ request()->routeIs('website-details.index') ? 'active' : '' }}">
                     <a href="{{ route('website-details.index') }}">
                         <i class="fas fa-globe"></i> Website Details
@@ -49,9 +55,15 @@
                 </li>
                 <li class="{{ request()->routeIs('admin.donations.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.donations.index') }}">
-                        <i class="fas fa-donate"></i> Donations
+                        <i class="fas fa-donate"></i> Direct Donations (QR)
                     </a>
-                </li>                               
+                </li>    
+                <li class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.payments.index') }}">
+                        <i class="fas fa-money-bill-wave"></i> PhonePe Donations
+                    </a>
+                </li>
+                           
             </ul>
         </nav>
     </div>

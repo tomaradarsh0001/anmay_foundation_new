@@ -17,20 +17,20 @@
                             <div class="account-dropdown js-dropdown">
                                 <div class="info clearfix">
                                     <div class="image">
-                                        <a href="{{ route('profile') }}">
+                                        <a href="{{ route('admin.profile.edit') }}">
                                             <img src="{{ asset('admin/images/icon/avatar-01.jpg') }}" alt="{{ Auth::user()->name ?? 'John Doe' }}" />
                                         </a>
                                     </div>
                                     <div class="content">
                                         <h5 class="name">
-                                            <a href="{{ route('profile') }}">{{ Auth::user()->name ?? 'john doe' }}</a>
+                                            <a href="{{ route('admin.profile.edit') }}">{{ Auth::user()->name ?? 'john doe' }}</a>
                                         </h5>
                                         <span class="email">{{ Auth::user()->email ?? 'johndoe@example.com' }}</span>
                                     </div>
                                 </div>
                                 <div class="account-dropdown__body">
                                     <div class="account-dropdown__item">
-                                        <a href="{{ route('profile') }}">
+                                        <a href="{{ route('admin.profile.edit') }}">
                                             <i class="zmdi zmdi-account"></i>Account
                                         </a>
                                     </div>

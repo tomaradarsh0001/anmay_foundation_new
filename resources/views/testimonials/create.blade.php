@@ -3,28 +3,275 @@
 @section('title', 'Admin - Testimonials')
 
 @section('content')
-<div class="container my-5">
-    <h4>Add Testimonial</h4>
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 
+                    0 5px 10px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(229, 231, 235, 0.5);
+    }
+    
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .form-title {
+        color: #1e293b;
+        font-size: 1.75rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        position: relative;
+    }
+    
+    .form-title:after {
+        content: '';
+        position: absolute;
+        bottom: -1rem;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #3b82f6, #6366f1);
+        border-radius: 2px;
+    }
+    
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        background: #f1f5f9;
+        color: #475569;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .back-btn:hover {
+        background: #e2e8f0;
+        color: #334155;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .back-btn svg {
+        transition: transform 0.3s ease;
+    }
+    
+    .back-btn:hover svg {
+        transform: translateX(-2px);
+    }
+    
+    .form-group {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        color: #334155;
+        font-weight: 500;
+        font-size: 0.95rem;
+        letter-spacing: 0.01em;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        font-size: 0.95rem;
+        color: #1e293b;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        transform: translateY(-1px);
+    }
+    
+    .form-input::placeholder {
+        color: #94a3b8;
+    }
+    
+    textarea.form-input {
+        min-height: 140px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+    
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid #f1f5f9;
+    }
+    
+    .btn-submit {
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        letter-spacing: 0.01em;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.25);
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
+    
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+    
+    .btn-cancel {
+        padding: 1rem 2rem;
+        background: white;
+        color: #64748b;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .btn-cancel:hover {
+        background: #f8fafc;
+        color: #475569;
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+    }
+    
+    .input-icon {
+        position: absolute;
+        right: 1.25rem;
+        top: 2.8rem;
+        color: #94a3b8;
+        pointer-events: none;
+    }
+    
+    @media (max-width: 640px) {
+        .form-container {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+        
+        .form-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn-submit, .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
 
-    <form method="POST" action="{{ route('testimonials.store') }}">
-        @csrf
-
-        <div class="mb-3">
-            <label>Testimonial Text</label>
-            <textarea name="text" class="form-control" rows="4" required></textarea>
+<div class="py-8 px-4">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">Add New Testimonial</h1>
+            <a href="{{ route('testimonials.index') }}" class="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to List
+            </a>
         </div>
 
-        <div class="mb-3">
-            <label>Name</label>
-            <input name="name" class="form-control" required>
-        </div>
+        <form method="POST" action="{{ route('testimonials.store') }}">
+            @csrf
 
-        <div class="mb-3">
-            <label>Profession</label>
-            <input name="profession" class="form-control" required>
-        </div>
+            <div class="form-group">
+                <label class="form-label">Testimonial Text</label>
+                <textarea name="text" 
+                          class="form-input" 
+                          rows="5" 
+                          placeholder="Share your testimonial experience..."
+                          required></textarea>
+                <div class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+            </div>
 
-        <button class="btn btn-primary">Save</button>
-    </form>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input name="name" 
+                           type="text"
+                           class="form-input"
+                           placeholder="Enter full name"
+                           required>
+                    <div class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Profession</label>
+                    <input name="profession" 
+                           type="text"
+                           class="form-input"
+                           placeholder="Enter profession"
+                           required>
+                    <div class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    Save Testimonial
+                </button>
+                <a href="{{ route('testimonials.index') }}" class="btn-cancel">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

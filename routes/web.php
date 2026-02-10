@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\CauseController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TestimonialController;
@@ -9,6 +9,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PhonepayController;
+use App\Http\Controllers\Admin\PaymentController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -17,12 +18,20 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Admin Profile Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::put('/update', [ProfileController::class, 'update'])->name('update');
+        Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('password');
+    });
+});
+
 Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Profile
-    Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
     
     // Logout
     Route::post('/logout', [DashboardController::class, 'logout'])->name('logout');
@@ -132,12 +141,50 @@ Route::post('/submit-form-contact', [ContactController::class, 'store'])->name('
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
+// Auto-check pending payments (protected route)
+Route::post('/payment/auto-check', [PhonepayController::class, 'autoCheckPendingPayments'])
+    ->middleware('auth:api') // Or use API token
+    ->name('payment.autoCheck');
+    // Real-time status checking
+Route::post('/payment/check-realtime', [PhonepayController::class, 'checkPaymentStatusRealtime'])
+    ->name('payment.check.realtime');
 
+// Alternative callback route for real-time checking
+Route::get('/payment/callback/realtime', [PhonepayController::class, 'paymentCallbackRealtime'])
+    ->name('payment.callback.realtime');
 // PhonePe Donation Routes
 Route::get('/donate-now', [PhonepayController::class, 'showDonationForm'])->name('donate-now');
+
+// Initiate payment (AJAX)
 Route::post('/initiate-payment', [PhonepayController::class, 'initiatePayment'])->name('initiate-payment');
-Route::get('/donation/success', [PhonepayController::class, 'paymentSuccess'])->name('payment.success');
-Route::get('/donation/failure', [PhonepayController::class, 'paymentFailure'])->name('payment.failure');
+
+// Payment callback (PhonePe redirects here after payment)
+Route::get('/payment/callback', [PhonepayController::class, 'paymentCallback'])->name('payment.callback');
+
+// Payment failure callback (separate failure URL)
+Route::get('/payment/failed', [PhonepayController::class, 'paymentFailed'])->name('payment.failed');
+
+// Check payment status (AJAX)
+Route::post('/payment/check-status', [PhonepayController::class, 'checkPaymentStatus'])
+    ->name('payment.checkStatus');
+
+
+// Admin routes
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // Payment management
+    Route::prefix('payments')->name('payments.')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('index');
+        Route::get('/{id}', [PaymentController::class, 'show'])->name('show');
+        Route::delete('/{id}', [PaymentController::class, 'destroy'])->name('destroy');
+        Route::get('/export', [PaymentController::class, 'export'])->name('export');
+             // Status check routes
+        Route::post('/{id}/check-status', [PaymentController::class, 'checkStatus'])
+            ->name('checkStatus');
+        
+        Route::post('/bulk-check-status', [PaymentController::class, 'bulkCheckStatus'])
+            ->name('bulkCheckStatus');
+    });
+});
 
 
 require __DIR__.'/auth.php';

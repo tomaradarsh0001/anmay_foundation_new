@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 class TestimonialController extends Controller
 {
     public function index()
-    {
-        $testimonials = Testimonial::latest()->get();
-        return view('testimonials.index', compact('testimonials'));
-    }
+{
+    // Use paginate() instead of get() or all()
+    $testimonials = Testimonial::orderBy('created_at', 'desc')->paginate(10);
+    
+    return view('testimonials.index', compact('testimonials'));
+}
 
     public function create()
     {

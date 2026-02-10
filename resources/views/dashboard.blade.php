@@ -9,136 +9,181 @@
     </div>
 </div>
 
-<div class="row m-t-30">
-    <div class="col-md-12">
-            <div class="card-body text-center">
-                <!-- Animated Character -->
-                <div class="character-container">
-                    <div class="character">
-                        <div class="head">
-                            <div class="eye left"></div>
-                            <div class="eye right"></div>
-                            <div class="mouth"></div>
-                        </div>
-                        <div class="body">
-                            <div class="arm left"></div>
-                            <div class="arm right"></div>
-                        </div>
-                    </div>
-                    <div class="speech-bubble">
-                        Hi! 👋
-                    </div>
-                </div>
-            </div>
+<div class="dashboard-tiles">
+    <a href="{{ route('dashboard') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-home"></i>
         </div>
+        <div class="tile-label">Dashboard</div>
+    </a>
+
+     <a href="{{ route('admin.profile.edit') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="tile-label">Profile</div>
+    </a>
+    <a href="{{ route('website-details.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-globe"></i>
+        </div>
+        <div class="tile-label">Website Details</div>
+    </a>
+
+    <a href="{{ route('admin.contacts') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-envelope-open-text"></i>
+        </div>
+        <div class="tile-label">Contact Forms</div>
+    </a>
+
+    <a href="{{ route('testimonials.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="tile-label">Testimonials</div>
+    </a>
+
+    <a href="{{ route('submissions.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="tile-label">Submissions</div>
+    </a>
+
+    <a href="{{ route('causes.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-hand-holding-heart"></i>
+        </div>
+        <div class="tile-label">Causes</div>
+    </a>
+
+    <a href="{{ route('admin.donations.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-donate"></i>
+        </div>
+        <div class="tile-label">Direct Donations (QR)</div>
+    </a>
+
+    <a href="{{ route('admin.payments.index') }}" class="tile">
+        <div class="tile-icon">
+            <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="tile-label">PhonePe Donations</div>
+    </a>
+
+    <!-- Logout Tile -->
+    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="tile">
+        <div class="tile-icon logout-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="tile-label">Logout</div>
+    </a>
+
+    <!-- Logout Form -->
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
 </div>
 
 <style>
-/* Container for centering */
-.character-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
+    /* Container */
+.dashboard-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+/* Logout specific icon color */
+.tile .logout-icon {
+    color: #e74a3b; /* red */
 }
 
-/* Speech bubble */
-.speech-bubble {
-    background: #4f46e5;
-    color: white;
-    padding: 10px 20px;
+.tile:hover .logout-icon {
+    color: #fff; /* white on hover */
+}
+/* Each Tile */
+.tile {
+    background: #fff;
     border-radius: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    animation: bounce 1.5s infinite;
-}
-
-/* Bounce animation for speech */
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-/* Character body */
-.character {
+    padding: 50px 20px; /* bigger tile height */
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-/* Head */
-.head {
-    width: 80px;
-    height: 80px;
-    background: #ffe0bd;
-    border-radius: 50%;
+    justify-content: center;
     position: relative;
-    margin-bottom: 10px;
+    overflow: hidden;
 }
 
-/* Eyes */
-.eye {
-    width: 12px;
-    height: 12px;
-    background: black;
-    border-radius: 50%;
-    position: absolute;
-    top: 25px;
+/* Icon inside tile */
+.tile-icon {
+    font-size: 3.5rem; /* bigger icon */
+    margin-bottom: 15px;
+    color: #4e73df;
+    transition: color 0.4s ease, transform 0.4s ease;
 }
 
-.eye.left { left: 20px; }
-.eye.right { right: 20px; }
-
-/* Mouth */
-.mouth {
-    width: 30px;
-    height: 10px;
-    border-bottom: 3px solid black;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+/* Label inside tile */
+.tile-label {
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
-/* Body */
-.body {
-    width: 20px;
-    height: 50px;
-    background: #4f46e5;
-    position: relative;
-    border-radius: 10px;
+/* Hover Effect */
+.tile:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: #fff;
 }
 
-/* Arms */
-.arm {
-    width: 10px;
-    height: 40px;
-    background: #ffe0bd;
-    position: absolute;
-    top: 0;
-    border-radius: 10px;
-    transform-origin: top center;
+.tile:hover .tile-icon {
+    color: #fff;
+    transform: rotate(10deg) scale(1.1);
 }
 
-/* Left arm waves */
-.arm.left {
-    left: -15px;
-    animation: wave 2s infinite;
+/* Smooth fade-in animation on load */
+.tile {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s forwards;
 }
 
-/* Right arm */
-.arm.right {
-    right: -15px;
+.tile:nth-child(1) { animation-delay: 0.05s; }
+.tile:nth-child(2) { animation-delay: 0.10s; }
+.tile:nth-child(3) { animation-delay: 0.15s; }
+.tile:nth-child(4) { animation-delay: 0.20s; }
+.tile:nth-child(5) { animation-delay: 0.25s; }
+.tile:nth-child(6) { animation-delay: 0.30s; }
+.tile:nth-child(7) { animation-delay: 0.35s; }
+.tile:nth-child(8) { animation-delay: 0.40s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Wave animation */
-@keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(30deg); }
-    50% { transform: rotate(0deg); }
-    75% { transform: rotate(-30deg); }
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .tile {
+        padding: 40px 15px;
+    }
+    .tile-icon {
+        font-size: 3rem;
+    }
+    .tile-label {
+        font-size: 1rem;
+    }
 }
+
+
 </style>
+
 
 @endsection
