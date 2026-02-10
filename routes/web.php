@@ -133,9 +133,11 @@ Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
 
-Route::post('/donate-now', [PhonepayController::class, 'initiatePayment'])->name('donate-now');
-Route::get('/donation-success', [PhonepayController::class, 'paymentSuccess'])->name('donation.success');
-
+// PhonePe Donation Routes
+Route::get('/donate-now', [PhonepayController::class, 'showDonationForm'])->name('donate-now');
+Route::post('/initiate-payment', [PhonepayController::class, 'initiatePayment'])->name('initiate-payment');
+Route::get('/donation/success', [PhonepayController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/donation/failure', [PhonepayController::class, 'paymentFailure'])->name('payment.failure');
 
 
 require __DIR__.'/auth.php';

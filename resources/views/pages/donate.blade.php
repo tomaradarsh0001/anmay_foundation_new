@@ -342,7 +342,7 @@
                                 </button>
                                 
                                 <!-- PhonePe Button -->
-                                <a href="{{route('make-donation')}}" target="_blank" class="btn-phonepe">
+                                <a href="{{route('donate-now')}}" target="_blank" class="btn-phonepe">
                                     <img src="{{ asset('assets/img/phonepay.png') }}" alt="PhonePe">
                                     Pay using PhonePe
                                 </a>

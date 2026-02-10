@@ -20,13 +20,18 @@
     .amount-btn.active { background: linear-gradient(45deg,#00b09b,#96c93d); border-color: transparent; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,176,155,0.3); }
     .btn-phonepe { background: linear-gradient(135deg,#5f259f 0%,#7a3bb8 100%); border: none; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
     .btn-phonepe:hover { background: linear-gradient(135deg,#4a1d7a 0%,#632a99 100%); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(95,37,159,0.3); color: white; }
+    .btn-phonepe:disabled { opacity: 0.6; cursor: not-allowed; }
     .phonepe-icon { width: 30px; height: 30px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 5px; }
     .phonepe-icon img { width: 100%; height: auto; }
     .donation-success { display: none; text-align: center; padding: 30px; }
     .donation-success i { font-size: 4rem; color: #00b09b; margin-bottom: 20px; }
     .btn-home { display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; text-decoration: none; transition: all 0.3s ease; }
     .btn-home:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+    .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .alert-danger { background: rgba(220,53,69,0.2); border: 1px solid rgba(220,53,69,0.3); color: #f8d7da; }
+    .alert-success { background: rgba(25,135,84,0.2); border: 1px solid rgba(25,135,84,0.3); color: #d1e7dd; }
 </style>
+
 <section class="donation-section mt-5">
     <div class="donation-container">
         <div class="donation-header">
@@ -34,7 +39,10 @@
             <p>Your contribution makes a difference. Every rupee counts.</p>
         </div>
 
-        <form id="donationForm" class="donation-form" method="POST" action="{{ route('donate-now') }}">
+        <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
+        <div id="successAlert" class="alert alert-success" style="display: none;"></div>
+
+        <form id="donationForm" class="donation-form">
             @csrf
             <div class="form-group">
                 <label for="fullName">Full Name *</label>
@@ -73,9 +81,6 @@
             </button>
         </form>
 
-        <!-- Debug Section -->
-        <div id="debugLog" style="margin-top:20px; color:#00ff00; font-family:monospace;"></div>
-
         <!-- Donation Success -->
         <div id="donationSuccess" class="donation-success">
             <i class="fas fa-check-circle"></i>
@@ -93,9 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const payNowBtn = document.getElementById('payNowBtn');
     const amountInput = document.getElementById('amount');
     const amountButtons = document.querySelectorAll('.amount-btn');
-    const donationSuccess = document.getElementById('donationSuccess');
-    const donatedAmountSpan = document.getElementById('donatedAmount');
-    const debugLog = document.getElementById('debugLog');
+    const errorAlert = document.getElementById('errorAlert');
+    const successAlert = document.getElementById('successAlert');
 
     // Amount button selection
     amountButtons.forEach(button => {
@@ -106,58 +110,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        e.stopPropagation();
 
-        // Validate
+        // Hide alerts
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
+
+        // Basic validation
         if (!form.checkValidity()) {
-            alert('Please fill all required fields correctly.');
+            showError('Please fill all required fields correctly.');
             return;
         }
 
-        const formData = {
-            fullName: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            amount: document.getElementById('amount').value
-        };
+        const phone = document.getElementById('phone').value;
+        if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+            showError('Please enter a valid 10-digit phone number.');
+            return;
+        }
 
+        const amount = document.getElementById('amount').value;
+        if (amount < 1) {
+            showError('Please enter a valid amount (minimum ₹1).');
+            return;
+        }
+
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('fullName', document.getElementById('fullName').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('phone', phone);
+        formData.append('amount', amount);
+
+        // Disable button and show loading
         payNowBtn.disabled = true;
-        payNowBtn.innerHTML = `<span>Processing...</span> <i class="fas fa-spinner fa-spin"></i>`;
+        const originalText = payNowBtn.innerHTML;
+        payNowBtn.innerHTML = `
+            <div class="phonepe-icon">
+                <img src="{{ asset('assets/img/phonepay.png') }}" alt="PhonePe">
+            </div>
+            <span>Processing...</span>
+            <i class="fas fa-spinner fa-spin"></i>
+        `;
 
-        debugLog.innerHTML = 'Sending request to server...<br>';
+        try {
+            const response = await fetch('{{ route("initiate-payment") }}', {
+                method: 'POST',
+                body: formData
+            });
 
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(res => res.json())
-        .then(res => {
-            debugLog.innerHTML += 'Server Response:<br>' + JSON.stringify(res, null, 4) + '<br>';
-
-            if(res.success && res.paymentUrl) {
-                debugLog.innerHTML += 'Redirecting to PhonePe...<br>';
-                window.location.href = res.paymentUrl;
+            const result = await response.json();
+            
+            if (result.success && result.paymentUrl) {
+                // Success - redirect to PhonePe
+                showSuccess('Redirecting to PhonePe...');
+                setTimeout(() => {
+                    window.location.href = result.paymentUrl;
+                }, 1000);
             } else {
+                // Show error
+                showError(result.message || 'Payment initiation failed.');
                 payNowBtn.disabled = false;
-                payNowBtn.innerHTML = `<div class="phonepe-icon">
-                    <img src="{{ asset('assets/img/phonepay.png') }}" alt="PhonePe">
-                </div>
-                <span>Pay Now with PhonePe</span>
-                <i class="fas fa-arrow-right"></i>`;
-                alert('Error: ' + res.message + (res.debug ? '\nDebug: '+ JSON.stringify(res.debug) : ''));
+                payNowBtn.innerHTML = originalText;
             }
-        })
-        .catch(err => {
-            debugLog.innerHTML += 'Fetch error: ' + err + '<br>';
-            alert('Error communicating with server.');
+        } catch (error) {
+            console.error('Error:', error);
+            showError('Network error. Please try again.');
             payNowBtn.disabled = false;
-        });
+            payNowBtn.innerHTML = originalText;
+        }
     });
+
+    function showError(message) {
+        errorAlert.textContent = message;
+        errorAlert.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+        successAlert.textContent = message;
+        successAlert.style.display = 'block';
+    }
 });
 </script>
 
