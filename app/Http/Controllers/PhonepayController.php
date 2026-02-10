@@ -40,65 +40,75 @@ class PhonepayController extends Controller
     }
 
     // Initiate payment
-    public function initiatePayment(Request $request)
-    {
-        $accessToken = $this->getAccessToken();
+   public function initiatePayment(Request $request)
+{
+    $accessToken = $this->getAccessToken();
 
-        if (!$accessToken) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to get access token'
-            ]);
-        }
-
-        // Convert amount to paise
-        $amountPaise = intval($request->amount) * 100;
-
-        // Unique order ID
-        $merchantOrderId = 'ORDER' . time();
-
-        $payload = [
-            'merchantOrderId' => $merchantOrderId,
-            'amount' => $amountPaise,
-            'expireAfter' => 1200,
-            'metaInfo' => [
-                'udf1' => $request->fullName,
-                'udf2' => $request->email,
-                'udf3' => $request->phone,
-                'udf4' => 'Donation',
-                'udf5' => 'Ref1'
-            ],
-            'paymentFlow' => [
-                'type' => 'PG_CHECKOUT',
-                'message' => 'Donation Payment',
-                'merchantUrls' => [
-                    'redirectUrl' => route('donation.success') // must be public URL
-                ]
-            ]
-        ];
-
-        Log::info('Payment Payload', ['payload' => $payload]);
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $accessToken
-        ])->post('https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay', $payload);
-
-        Log::info('Payment Response', ['response' => $response->body()]);
-
-        $data = $response->json();
-
-        if (isset($data['redirectUrl'])) {
-            // Redirect to PhonePe payment page
-            return redirect($data['redirectUrl']);
-        }
-
+    if (!$accessToken) {
         return response()->json([
             'success' => false,
-            'message' => 'Payment URL not received',
-            'debug' => $data
+            'message' => 'Failed to get access token'
         ]);
     }
+
+    if (!is_numeric($request->amount) || $request->amount <= 0) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid amount'
+        ]);
+    }
+
+    $amountPaise = (int) ($request->amount * 100);
+    $merchantOrderId = 'ORDER' . time();
+
+    $payload = [
+        "merchantId" => "M23EAVEL66U6Q", // ✅ REQUIRED
+        "merchantOrderId" => $merchantOrderId,
+        "amount" => $amountPaise,
+        "expireAfter" => 1200,
+        "metaInfo" => [
+            "udf1" => $request->fullName,
+            "udf2" => $request->email,
+            "udf3" => $request->phone,
+            "udf4" => "Donation",
+            "udf5" => "Ref1"
+        ],
+        "paymentFlow" => [
+            "type" => "PG_CHECKOUT",
+            "message" => "Donation Payment",
+            "merchantUrls" => [
+                // ✅ HARD HTTPS (important)
+                "redirectUrl" => "https://codeztore.com/donation/success"
+            ]
+        ]
+    ];
+
+    Log::info('Payment Payload', $payload);
+
+    $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $accessToken
+    ])->post(
+        'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay',
+        $payload
+    );
+
+    $data = $response->json();
+    Log::info('Payment Response', $data);
+
+    // ✅ CORRECT redirect handling
+    if (isset($data['data']['instrumentResponse']['redirectInfo']['url'])) {
+        return redirect(
+            $data['data']['instrumentResponse']['redirectInfo']['url']
+        );
+    }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Payment URL not received',
+        'debug' => $data
+    ]);
+}
 
     // Payment success page
     public function paymentSuccess(Request $request)
