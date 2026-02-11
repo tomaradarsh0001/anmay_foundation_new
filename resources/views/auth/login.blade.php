@@ -105,7 +105,7 @@
                                 Password
                             </label>
                             @if (Route::has('password.request'))
-                                <a class="text-sm font-medium text-blue-600 hover:text-blue-500 transition duration-200" href="{{ route('password.request') }}">
+                                <a class="text-sm font-medium text-blue-600 hover:text-blue-500 transition duration-200" href="#">
                                     Forgot password?
                                 </a>
                             @endif
@@ -154,17 +154,7 @@
                     </div>
                 </form>
 
-                <!-- Register Link -->
-                @if (Route::has('register'))
-                    <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-600">
-                            Don't have an account?
-                            <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500 transition duration-200">
-                                Sign up here
-                            </a>
-                        </p>
-                    </div>
-                @endif
+            
             </div>
         </div>
     </div>
