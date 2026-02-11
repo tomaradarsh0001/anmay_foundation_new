@@ -543,7 +543,7 @@
         <div class="edit-form-card">
             <div class="form-header">
                 <div class="form-header-content">
-                    <h2>
+                    <h2 class="text-white">
                         <i class="fas fa-edit"></i>
                         Edit Information
                     </h2>

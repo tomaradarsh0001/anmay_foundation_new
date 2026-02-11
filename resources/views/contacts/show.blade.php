@@ -562,12 +562,14 @@
                 </div>
                 <div class="message-status">
                          
-                
-                <button class="btn-action delete" onclick="confirmDelete({{ $contact->id }})">
-                    <i class="fas fa-trash"></i>
-                    Delete Message
-                </button>
-                  
+         <form id="deleteForm" method="POST" action="{{ route('admin.contacts.delete', $contact->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i> Delete Message
+                    </button>
+                </form>
+
                 </div>
             </div>
             
@@ -651,44 +653,13 @@
         </div>
     </div>
 </div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this message? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Message</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
-  
-   
-
-   
-
-    function confirmDelete(contactId) {
-        const form = document.getElementById('deleteForm');
-        form.action = `/admin/contacts/${contactId}`;
-        
-        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        modal.show();
+function confirmDelete() {
+    if (confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
+        document.getElementById('deleteForm').submit();
     }
-
-
+}
 </script>
+
+
 @endsection

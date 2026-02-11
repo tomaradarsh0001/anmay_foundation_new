@@ -23,19 +23,30 @@
     <h1 class="display-6 mb-5 text-white">People's Love to Anmay Foundation</h1>
     </div>
   <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
-    @foreach($globalTestimonials as $testimonial)
-        <div class="testimonial-item text-center">
+  @foreach($globalTestimonials as $testimonial)
+    <div class="testimonial-item text-center">
+        @if($testimonial->image && Storage::disk('public')->exists($testimonial->image))
             <img class="img-fluid bg-light rounded-circle p-2 mx-auto mb-4"
-                 src="{{ asset('assets/img/user.png') }}"
-                 style="width: 100px; height: 100px;">
-
-            <div class="testimonial-text rounded text-center p-4 mb-5">
-                <p>{{ $testimonial->text }}</p>
-                <h5 class="mb-1">{{ $testimonial->name }}</h5>
-                <span class="fst-italic">{{ $testimonial->profession }}</span>
+                 src="{{ asset('storage/' . $testimonial->image) }}"
+                 alt="{{ $testimonial->name }}"
+                 style="width: 100px; height: 100px; object-fit: cover;">
+        @else
+            <!-- Show placeholder with initials if no image -->
+            <div class="mx-auto mb-4 rounded-circle bg-light d-flex align-items-center justify-content-center"
+                 style="width: 100px; height: 100px; border: 2px solid #ddd;">
+                <span class="fs-3 fw-bold text-primary">
+                    {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                </span>
             </div>
+        @endif
+
+        <div class="testimonial-text rounded text-center p-4 mb-5">
+            <p class="mb-3">{{ $testimonial->text }}</p>
+            <h5 class="mb-1">{{ $testimonial->name }}</h5>
+            <span class="fst-italic text-muted">{{ $testimonial->profession }}</span>
         </div>
-    @endforeach
+    </div>
+@endforeach
 </div>
 </div>
 </div>

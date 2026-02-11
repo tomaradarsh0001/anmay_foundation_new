@@ -71,6 +71,8 @@ Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class
 
 Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts');
 Route::get('/admin/contacts/{id}', [ContactController::class, 'show'])->name('admin.contacts.show');
+// Delete a contact
+Route::delete('/admin/contacts/{id}/delete', [ContactController::class, 'delete'])->name('admin.contacts.delete');
 
 
 Route::prefix('admin')->group(function () {

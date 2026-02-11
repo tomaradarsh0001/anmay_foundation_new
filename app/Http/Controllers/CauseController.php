@@ -44,17 +44,12 @@ class CauseController extends Controller
 
     Cause::create($data);
 
-    return redirect()->back()->with('success', 'Cause created successfully');
+return redirect()->route('causes.index')
+                 ->with('success', 'Cause created successfully');
 }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cause $cause)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -95,7 +90,7 @@ class CauseController extends Controller
   public function destroy(Cause $cause)
 {
     $cause->delete();
-    return redirect()->back()->with('success', 'Deleted');
+    return redirect()->route('causes.index')->with('danger', 'Deleted');
 }
 
 }

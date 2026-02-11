@@ -86,7 +86,7 @@
         letter-spacing: 0.01em;
     }
     
-    .form-input {
+    .form-input, .form-file {
         width: 100%;
         padding: 1rem 1.25rem;
         border: 2px solid #e2e8f0;
@@ -98,7 +98,28 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
     
-    .form-input:focus {
+    .form-file {
+        padding: 0.8rem 1.25rem;
+        cursor: pointer;
+    }
+    
+    .form-file::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    
+    .form-file::before {
+        content: 'Choose Image';
+        display: inline-block;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        margin-right: 1rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+    
+    .form-input:focus, .form-file:focus {
         outline: none;
         border-color: #3b82f6;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
@@ -181,6 +202,37 @@
         pointer-events: none;
     }
     
+    .image-preview {
+        margin-top: 1rem;
+        display: none;
+    }
+    
+    .image-preview.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .preview-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 3px solid #e2e8f0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-help {
+        color: #64748b;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+    
     @media (max-width: 640px) {
         .form-container {
             padding: 1.5rem;
@@ -200,6 +252,11 @@
         .btn-submit, .btn-cancel {
             width: 100%;
         }
+        
+        .preview-image {
+            width: 150px;
+            height: 150px;
+        }
     }
 </style>
 
@@ -215,7 +272,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('testimonials.store') }}">
+        <form method="POST" action="{{ route('testimonials.store') }}" enctype="multipart/form-data" id="testimonialForm">
             @csrf
 
             <div class="form-group">
@@ -263,6 +320,21 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="form-label">Profile Image</label>
+                <input type="file" 
+                       name="image" 
+                       id="imageInput"
+                       class="form-file"
+                       accept="image/*"
+                       onchange="previewImage(event)">
+                <span class="form-help">Recommended: 200x200 pixels. Max size: 2MB. Allowed formats: JPG, PNG, GIF</span>
+                
+                <div class="image-preview" id="imagePreview">
+                    <img class="preview-image" id="previewImg" src="" alt="Image Preview">
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn-submit">
                     Save Testimonial
@@ -274,4 +346,47 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.classList.add('active');
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.classList.remove('active');
+            previewImg.src = '';
+        }
+    }
+
+    document.getElementById('testimonialForm').addEventListener('submit', function(e) {
+        const imageInput = document.getElementById('imageInput');
+        if (imageInput.files.length > 0) {
+            const file = imageInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            
+            if (file.size > maxSize) {
+                e.preventDefault();
+                alert('Image size must be less than 2MB');
+                return;
+            }
+            
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                e.preventDefault();
+                alert('Only JPG, PNG and GIF images are allowed');
+                return;
+            }
+        }
+    });
+</script>
 @endsection

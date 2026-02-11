@@ -528,9 +528,17 @@
                     </div>
 
                     <div class="testimonial-author">
-                        <div class="author-avatar">
-                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
-                        </div>
+                       @if($testimonial->image && Storage::disk('public')->exists($testimonial->image))
+                            <div class="author-avatar">
+                                <img src="{{ asset('storage/' . $testimonial->image) }}" 
+                                    alt="{{ $testimonial->name }}" 
+                                    class="avatar-image">
+                            </div>
+                        @else
+                            <div class="author-avatar placeholder">
+                                {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                            </div>
+                        @endif
                         <div class="author-info">
                             <div class="author-name">
                                 {{ $testimonial->name }}

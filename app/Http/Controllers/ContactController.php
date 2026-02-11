@@ -45,4 +45,12 @@ public function show($id)
     return view('contacts.show', compact('contact'));
 }
 
+public function delete($id)
+{
+    $contact = Contact::findOrFail($id);
+    $contact->delete();
+
+    return redirect()->route('admin.contacts')->with('success', 'Message deleted successfully!');
+}
+
 }

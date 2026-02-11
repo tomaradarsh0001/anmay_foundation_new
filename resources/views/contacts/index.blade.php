@@ -707,7 +707,7 @@
                         <i class="fas fa-inbox"></i>
                         <h3>No Messages Yet</h3>
                         <p>When visitors contact you through the contact form, their messages will appear here.</p>
-                        <a href="{{ route('admin.dashboard') }}" class="btn-show" style="width: auto; padding: 12px 30px;">
+                        <a href="{{ route('dashboard') }}" class="btn-show" style="width: auto; padding: 12px 30px;">
                             <i class="fas fa-home"></i>
                             Back to Dashboard
                         </a>

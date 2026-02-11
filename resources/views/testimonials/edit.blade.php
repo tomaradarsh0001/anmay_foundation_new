@@ -224,7 +224,7 @@
         transition: all 0.3s ease;
     }
 
-    .form-control {
+    .form-control, .form-control-file {
         width: 100%;
         padding: 15px 20px;
         border: 2px solid #e0e0e0;
@@ -236,7 +236,28 @@
         font-family: inherit;
     }
 
-    .form-control:focus {
+    .form-control-file {
+        padding: 12px 20px;
+        cursor: pointer;
+    }
+
+    .form-control-file::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+
+    .form-control-file::before {
+        content: 'Change Image';
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        margin-right: 1rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+    .form-control:focus, .form-control-file:focus {
         border-color: #667eea;
         box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
         background: white;
@@ -276,125 +297,45 @@
         font-weight: 700;
     }
 
-    .rating-section {
-        margin-bottom: 30px;
+    .current-image {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
     }
 
-    .rating-label {
-        display: block;
-        color: #333;
-        font-weight: 600;
-        margin-bottom: 15px;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .current-image img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .rating-label i {
-        color: #ffc107;
-    }
-
-    .rating-stars {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    .star-input {
+    .image-preview {
+        margin-top: 15px;
         display: none;
     }
 
-    .star-label {
-        cursor: pointer;
-        font-size: 2rem;
-        color: #e0e0e0;
-        transition: all 0.3s ease;
+    .image-preview.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
     }
 
-    .star-label:hover,
-    .star-label:hover ~ .star-label {
-        color: #ffc107;
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
-    .star-input:checked ~ .star-label {
-        color: #e0e0e0;
-    }
-
-    .star-input:checked + .star-label,
-    .star-input:checked + .star-label ~ .star-label {
-        color: #ffc107;
-    }
-
-    .rating-value {
-        font-size: 14px;
-        color: #666;
-        margin-left: 10px;
-    }
-
-    .toggle-group {
-        display: flex;
-        gap: 30px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-
-    .toggle-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-    }
-
-    .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 30px;
-    }
-
-    .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .toggle-slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 34px;
-    }
-
-    .toggle-slider:before {
-        position: absolute;
-        content: "";
-        height: 22px;
-        width: 22px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
+    .preview-new-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
         border-radius: 50%;
-    }
-
-    input:checked + .toggle-slider {
-        background-color: #667eea;
-    }
-
-    input:checked + .toggle-slider:before {
-        transform: translateX(30px);
-    }
-
-    .toggle-label {
-        color: #333;
-        font-weight: 500;
-        font-size: 14px;
+        border: 3px solid #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
 
     .preview-section {
@@ -451,8 +392,8 @@
     }
 
     .preview-avatar {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
@@ -460,9 +401,16 @@
         justify-content: center;
         color: white;
         font-weight: 600;
-        font-size: 18px;
+        font-size: 20px;
         border: 3px solid white;
         box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        overflow: hidden;
+    }
+
+    .preview-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .preview-author-info {
@@ -575,6 +523,13 @@
         font-size: 1.5rem;
     }
 
+    .form-help {
+        color: #666;
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
     @media (max-width: 768px) {
         .edit-testimonial-container {
             padding: 20px;
@@ -609,26 +564,40 @@
         .btn-cancel {
             width: 100%;
         }
-
-        .toggle-group {
-            flex-direction: column;
-            gap: 20px;
-        }
     }
 
-    .form-control.is-invalid {
+    .form-control.is-invalid, .form-control-file.is-invalid {
         border-color: #dc3545;
         background: #f8d7da;
     }
 
-    .form-control.is-invalid:focus {
+    .form-control.is-invalid:focus, .form-control-file.is-invalid:focus {
         box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.25);
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 0 15px;
+    }
+
+    @media (max-width: 768px) {
+        .col-md-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
     }
 </style>
 
 <div class="edit-testimonial-container">
     <div class="page-header">
-        <h1 >
+        <h1>
             <i class="fas fa-edit"></i>
             Edit Testimonial
         </h1>
@@ -644,7 +613,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('testimonials.update', $testimonial->id) }}" id="testimonialForm">
+    <form method="POST" action="{{ route('testimonials.update', $testimonial->id) }}" id="testimonialForm" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -683,7 +652,7 @@
                                       required
                                       placeholder="Share what this person said about your foundation..."
                                       oninput="updatePreview()">{{ old('text', $testimonial->text) }}</textarea>
-                            <div class="character-count" id="charCount">0/500</div>
+                            <div class="character-count" id="charCount">{{ strlen(old('text', $testimonial->text)) }}/500</div>
                         </div>
                         @error('text')
                             <div class="error-message">
@@ -701,8 +670,8 @@
                         Author Information
                     </h3>
 
-                    <div class="row" style="display: flex; flex-wrap: wrap; margin: 0 -15px;">
-                        <div class="col-md-6" style="flex: 0 0 50%; max-width: 50%; padding: 0 15px;">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">
                                     <i class="fas fa-user-circle"></i>
@@ -727,7 +696,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6" style="flex: 0 0 50%; max-width: 50%; padding: 0 15px;">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">
                                     <i class="fas fa-briefcase"></i>
@@ -751,12 +720,49 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-image"></i>
+                                    Profile Image
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="file" 
+                                           name="image" 
+                                           id="authorImage"
+                                           class="form-control-file @error('image') is-invalid @enderror"
+                                           accept="image/*"
+                                           onchange="previewNewImage(event)">
+                                    
+                                    @if($testimonial->image)
+                                        <div class="current-image">
+                                            <p class="form-help">Current Image:</p>
+                                            <img src="{{ $testimonial->image_url }}" 
+                                                 alt="{{ $testimonial->name }}"
+                                                 id="currentImage">
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="image-preview" id="newImagePreview">
+                                        <p class="form-help">New Image Preview:</p>
+                                        <img class="preview-new-image" 
+                                             id="previewNewImg" 
+                                             src="" 
+                                             alt="New Image Preview">
+                                    </div>
+                                </div>
+                                @error('image')
+                                    <div class="error-message">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <span class="form-help">Recommended: 200x200 pixels. Max size: 2MB. Allowed formats: JPG, PNG, GIF</span>
+                            </div>
+                        </div>
                     </div>
-
-                    
                 </div>
-
-               
 
                 <!-- Preview Section -->
                 <div class="preview-section">
@@ -774,7 +780,13 @@
                         </div>
                         <div class="preview-author">
                             <div class="preview-avatar" id="previewAvatar">
-                                {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                @if($testimonial->image)
+                                    <img src="{{ $testimonial->image_url }}" 
+                                         alt="{{ $testimonial->name }}"
+                                         id="avatarImage">
+                                @else
+                                    {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                @endif
                             </div>
                             <div class="preview-author-info">
                                 <div class="preview-author-name" id="previewName">
@@ -808,7 +820,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize character count
         updateCharacterCount();
-        updatePreview();
         
         // Character count for textarea
         const textarea = document.getElementById('testimonialText');
@@ -832,6 +843,26 @@
                 alert('Testimonial text cannot exceed 500 characters.');
                 return;
             }
+            
+            // Validate image file
+            const imageInput = document.getElementById('authorImage');
+            if (imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                
+                if (file.size > maxSize) {
+                    e.preventDefault();
+                    alert('Image size must be less than 2MB');
+                    return;
+                }
+                
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    e.preventDefault();
+                    alert('Only JPG, PNG and GIF images are allowed');
+                    return;
+                }
+            }
         });
     });
 
@@ -851,6 +882,56 @@
         } else {
             charCount.className = 'character-count';
         }
+        
+        updatePreview();
+    }
+
+    function previewNewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('newImagePreview');
+        const previewImg = document.getElementById('previewNewImg');
+        const avatarImage = document.getElementById('avatarImage');
+        const previewAvatar = document.getElementById('previewAvatar');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.classList.add('active');
+                
+                // Update preview avatar
+                if (avatarImage) {
+                    avatarImage.src = e.target.result;
+                } else {
+                    // Create new image element for preview
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = document.getElementById('authorName').value || 'Avatar';
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    previewAvatar.innerHTML = '';
+                    previewAvatar.appendChild(img);
+                }
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.classList.remove('active');
+            previewImg.src = '';
+            
+            // Revert to current image if available
+            const currentImage = document.getElementById('currentImage');
+            if (currentImage) {
+                const avatarImage = document.getElementById('avatarImage');
+                if (avatarImage) {
+                    avatarImage.src = currentImage.src;
+                } else {
+                    previewAvatar.innerHTML = '{{ strtoupper(substr($testimonial->name, 0, 1)) }}';
+                }
+            }
+        }
     }
 
     function updatePreview() {
@@ -869,40 +950,14 @@
         const previewProfession = document.getElementById('previewProfession');
         previewProfession.textContent = professionInput.value || "Profession";
         
-        // Update avatar
+        // Update avatar initials if no image
         const previewAvatar = document.getElementById('previewAvatar');
-        previewAvatar.textContent = nameInput.value ? nameInput.value.charAt(0).toUpperCase() : "N";
-    }
-
-    function updateRating(rating) {
-        const ratingValue = document.getElementById('ratingValue');
-        ratingValue.textContent = `${rating}/5`;
+        const hasImage = previewAvatar.querySelector('img');
+        const nameInputValue = nameInput.value;
         
-        // Add stars to preview
-        const previewCard = document.querySelector('.preview-card');
-        let starsHtml = '<div class="rating" style="margin-top: 15px;">';
-        for (let i = 1; i <= 5; i++) {
-            starsHtml += `<i class="fas fa-star star ${i <= rating ? '' : 'empty'}" style="font-size: 1rem;"></i>`;
+        if (!hasImage && !document.getElementById('authorImage').files.length) {
+            previewAvatar.textContent = nameInputValue ? nameInputValue.charAt(0).toUpperCase() : "N";
         }
-        starsHtml += `</div>`;
-        
-        // Check if stars already exist
-        const existingStars = previewCard.querySelector('.rating');
-        if (existingStars) {
-            existingStars.remove();
-        }
-        
-        // Add stars after author info
-        const authorInfo = previewCard.querySelector('.preview-author-info');
-        if (authorInfo && rating > 0) {
-            authorInfo.insertAdjacentHTML('afterend', starsHtml);
-        }
-    }
-
-    // Set rating from existing value
-    const initialRating = {{ old('rating', $testimonial->rating ?? 0) }};
-    if (initialRating > 0) {
-        updateRating(initialRating);
     }
 </script>
 @endsection
