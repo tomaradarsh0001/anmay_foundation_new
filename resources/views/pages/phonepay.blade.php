@@ -69,6 +69,8 @@
                     <div class="amount-btn" data-amount="2000">₹2,000</div>
                     <div class="amount-btn" data-amount="5000">₹5,000</div>
                     <div class="amount-btn" data-amount="10000">₹10,000</div>
+                    <div class="amount-btn" data-amount="10000">₹20,000</div>
+                    <div class="amount-btn" data-amount="10000">₹50,000</div>
                 </div>
             </div>
 
