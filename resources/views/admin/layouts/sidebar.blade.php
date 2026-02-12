@@ -11,14 +11,13 @@
     <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
-
                 <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}">
                         <i class="fas fa-home"></i> Dashboard
                     </a>
                 </li>
 
-                  <li class="{{ request()->routeIs('admin.profile.edit') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.profile.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.profile.edit') }}">
                         <i class="fas fa-user"></i> Profile Settings
                     </a>
@@ -53,17 +52,24 @@
                         <i class="fas fa-hand-holding-heart"></i> Causes
                     </a>
                 </li>
+
                 <li class="{{ request()->routeIs('admin.donations.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.donations.index') }}">
                         <i class="fas fa-donate"></i> Direct Donations (QR)
                     </a>
-                </li>    
-                <li class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                </li>
+
+                <li class="{{ request()->routeIs('admin.payments.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.payments.index') }}">
                         <i class="fas fa-money-bill-wave"></i> PhonePe Donations
                     </a>
                 </li>
-                           
+
+                <li class="{{ request()->routeIs('admin.payments.razorpay.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.payments.razorpay.index') }}">
+                        <i class="fas fa-credit-card"></i> Razorpay Donations
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

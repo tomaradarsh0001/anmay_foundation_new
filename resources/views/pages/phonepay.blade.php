@@ -37,6 +37,12 @@
         <div class="donation-header">
             <h1>Make a Donation</h1>
             <p>Your contribution makes a difference. Every rupee counts.</p>
+            <div style="margin-top: 15px;">
+                <span style="background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 50px; font-size: 0.9rem;">
+                    <i class="fas fa-shield-alt" style="color: #00b09b; margin-right: 5px;"></i>
+                    Secure payments by Phonepay
+                </span>
+            </div>
         </div>
 
         <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>

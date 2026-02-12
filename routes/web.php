@@ -9,7 +9,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PhonepayController;
+use App\Http\Controllers\RazorController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\RazorpayPaymentController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -136,11 +138,38 @@ Route::post('/payment/check-realtime', [PhonepayController::class, 'checkPayment
 Route::get('/payment/callback/realtime', [PhonepayController::class, 'paymentCallbackRealtime'])
     ->name('payment.callback.realtime');
 
-Route::get('/donate-now', [PhonepayController::class, 'showDonationForm'])->name('donate-now');
+Route::get('/donate-now-phonepay', [PhonepayController::class, 'showDonationForm'])->name('donate-now');
 Route::post('/initiate-payment', [PhonepayController::class, 'initiatePayment'])->name('initiate-payment');
 Route::get('/payment/callback', [PhonepayController::class, 'paymentCallback'])->name('payment.callback');
 Route::get('/payment/failed', [PhonepayController::class, 'paymentFailed'])->name('payment.failed');
 Route::post('/payment/check-status', [PhonepayController::class, 'checkPaymentStatus'])->name('payment.checkStatus');
+
+/*
+|--------------------------------------------------------------------------
+| Razorpay Routes (PhonePe)
+|--------------------------------------------------------------------------
+*/
+Route::get('/donate-now-razorpay', [RazorpayPaymentController::class, 'showDonationForm'])->name('razorpay.donation.form');
+Route::post('/razorpay/initiate', [RazorpayPaymentController::class, 'initiatePayment'])->name('razorpay.initiate');
+Route::post('/razorpay/verify', [RazorpayPaymentController::class, 'verifyPayment'])->name('razorpay.verify');
+Route::get('/razorpay/success', [RazorpayPaymentController::class, 'paymentSuccess'])->name('razorpay.success');
+Route::get('/razorpay/failed', [RazorpayPaymentController::class, 'paymentFailed'])->name('razorpay.failed');
+Route::get('/razorpay/status/{merchantOrderId}', [RazorpayPaymentController::class, 'getPaymentStatus'])->name('razorpay.status');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
+    
+    // Razorpay Payments Management
+    Route::prefix('payments/razorpay')->name('payments.razorpay.')->group(function() {
+        Route::get('/', [RazorpayPaymentController::class, 'index'])->name('index');
+        Route::get('/export', [RazorpayPaymentController::class, 'export'])->name('export');
+        Route::get('/{id}', [RazorpayPaymentController::class, 'show'])->name('show');
+        Route::put('/{id}/status', [RazorpayPaymentController::class, 'updateStatus'])->name('status');
+        Route::delete('/payments/razorpay/{id}', [RazorpayPaymentController::class, 'destroy'])
+    ->name('destroy');
+
+    });
+    
+});
 
 /*
 |--------------------------------------------------------------------------

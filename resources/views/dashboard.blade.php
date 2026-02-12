@@ -10,12 +10,7 @@
 </div>
 
 <div class="dashboard-tiles">
-    <a href="{{ route('dashboard') }}" class="tile">
-        <div class="tile-icon">
-            <i class="fas fa-home"></i>
-        </div>
-        <div class="tile-label">Dashboard</div>
-    </a>
+    
 
      <a href="{{ route('admin.profile.edit') }}" class="tile">
         <div class="tile-icon">
@@ -71,7 +66,12 @@
         </div>
         <div class="tile-label">PhonePe Donations</div>
     </a>
-
+   <a href="{{ route('admin.payments.razorpay.index') }}" class="tile">
+    <div class="tile-icon">
+        <i class="fas fa-credit-card"></i>
+    </div>
+    <div class="tile-label">Razorpay Donations</div>
+</a>
     <!-- Logout Tile -->
     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="tile">
         <div class="tile-icon logout-icon">

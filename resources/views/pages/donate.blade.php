@@ -121,39 +121,131 @@
     }
 
     /* PhonePe Button Style */
-    .btn-phonepe {
-        background: linear-gradient(135deg, #5f259f 0%, #7a3bb8 100%);
-        border: none;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        width: 100%;
-        margin-top: 15px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
+.btn-phonepe {
+    background: linear-gradient(135deg, #5f259f 0%, #7a3bb8 100%);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border: none;
+    font-size: 1.1rem;
+}
 
-    .btn-phonepe:hover {
-        background: linear-gradient(135deg, #4a1d7a 0%, #632a99 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(95, 37, 159, 0.3);
-        color: white;
-    }
+.btn-phonepe:hover {
+    background: linear-gradient(135deg, #4a1d7a 0%, #632a99 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(95, 37, 159, 0.3);
+    color: white;
+}
 
-    .btn-phonepe:active {
-        transform: translateY(0);
-    }
+.btn-phonepe:active {
+    transform: translateY(0);
+}
 
-    .btn-phonepe img {
-        width: 24px;
-        height: 24px;
-    }
+.btn-phonepe:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
 
+.phonepe-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phonepe-icon img {
+    width: 100%;
+    height: auto;
+}
+
+/* Razorpay Button Style */
+.btn-razorpay {
+    background: linear-gradient(135deg, #0C5ADB 0%, #2A6EF5 100%);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.btn-razorpay:hover {
+    background: linear-gradient(135deg, #083E9E 0%, #0C5ADB 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(12,90,219,0.3);
+    color: white;
+}
+
+.btn-razorpay:active {
+    transform: translateY(0);
+}
+
+.btn-razorpay:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.razorpay-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.razorpay-icon img {
+    width: 100%;
+    height: auto;
+}
+
+/* If you want both buttons side by side */
+.payment-buttons-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.payment-buttons-container .btn-phonepe,
+.payment-buttons-container .btn-razorpay {
+    margin-top: 0;
+}
+
+/* Compact version for side-by-side layout */
+.btn-phonepe-compact,
+.btn-razorpay-compact {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+}
+
+.btn-phonepe-compact .phonepe-icon,
+.btn-razorpay-compact .razorpay-icon {
+    width: 24px;
+    height: 24px;
+}
     .success-message {
         display: none;
         background: #28a745;
@@ -342,12 +434,24 @@
                                 </button>
                                 
                                 <!-- PhonePe Button -->
-                                <a href="{{route('donate-now')}}" target="_blank" class="btn-phonepe">
+                               <!-- Single Button Full Width -->
+                            <a href="{{route('razorpay.donation.form')}}" class="btn-razorpay" >
+                                <div class="razorpay-icon">
+                                    <img src="{{ asset('assets/img/razorpay.png') }}" alt="Razorpay">
+                                </div>
+                                <span>Pay with Razorpay</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+
+                            <a a href="{{route('donate-now')}}" class="btn-phonepe" >
+                                <div class="phonepe-icon">
                                     <img src="{{ asset('assets/img/phonepay.png') }}" alt="PhonePe">
-                                    Pay using PhonePe
-                                </a>
+                                </div>
+                                <span>Pay with PhonePe</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+
                             </div>
-                        </form>
                         
                         <div class="success-message" id="successMessage">
                             <i class="fas fa-check-circle me-2"></i>
