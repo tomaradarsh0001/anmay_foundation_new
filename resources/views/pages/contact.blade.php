@@ -53,7 +53,7 @@
 
                 <div class="bg-white shadow rounded p-5">
                      <h2 class="fw-bold mb-4">Contact Form</h2>
-                     <div id="formMessage3" class="form-message-wrapper"></div>
+                     <div id="formMessage3" class="form-message-wrapper text-white"></div>
                     <form id="contactForm3" action="{{ route('form.store.contact') }}" method="POST">
                         @csrf
                         <div class="row g-3">
